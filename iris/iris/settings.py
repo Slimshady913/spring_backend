@@ -20,7 +20,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5q2te&_7t38ym$*jjlb-j^4va&jv8(4sig#_r(1g@y+pz@lw1k'
+import os, json
+from django.core.exceptions import ImproperlyConfigured
+
+secret_file = os.path.join(BASE_DIR, 'secrets.json') #secrets.json 불러오기
+
+with open(secret_file, 'r') as f:
+    secrets = json.loads(f.read())
+
+def get_secret(setting, secrets=secrets): #예외 처리
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = "Set the {} enviroment variable".format(setting)
+        raise ImproperlyConfigured(error_msg)
+
+SECRET_KEY = get_secret("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
