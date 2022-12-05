@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 import pandas as pd
-#from . models import PredResults
+from . models import PredResults
 
 def predict(request):
     return render(request, 'predict.html')
@@ -24,8 +24,8 @@ def predict_chances(request):
 
         classification = result[0]
 
-        #PredResults.objects.create(sepal_length=sepal_length, sepal_width=sepal_width, petal_length=petal_length,
-                                   #petal_width=petal_width, classification=classification)
+        PredResults.objects.create(sepal_length=sepal_length, sepal_width=sepal_width, petal_length=petal_length,
+                                   petal_width=petal_width, classification=classification)
 
         return JsonResponse({'result': classification, 'sepal_length': sepal_length,
                              'sepal_width': sepal_width, 'petal_length': petal_length, 'petal_width': petal_width},
